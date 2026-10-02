@@ -18,7 +18,8 @@ jobs:
         run: pip install -r requirements.txt pyinstaller
       - name: 테스트 (Windows 경로·한글 파일명 포함)
         run: python -m pytest -q
-      - name: exe 빌드 (폴더형: 백신 오탐이 적고 실행이 빠름)
+      # 폴더형(onedir): 한 파일형보다 백신 오탐이 적고 실행이 빠름
+      - name: exe 빌드
         run: >
           pyinstaller --noconfirm --onedir --name jeonjang_tasks
           --add-data "app/templates;app/templates"
