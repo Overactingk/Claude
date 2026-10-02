@@ -19,7 +19,9 @@
 
 ## 환경 조건
 - 사내망 전용, 외부 CDN 금지 → CSS/JS 직접 작성, 폰트는 맑은 고딕
-- 회사 PC에 DRM/반출통제 솔루션 있음 → 배포 전 `tools/share_test.bat`로 검증
+- 회사 PC에 문서중앙화(cloudium) 있음: **C 드라이브·바탕화면 쓰기 금지**, 저장은 `U:`(cloudium 서버)만 가능
+  → 프로그램은 data_dir 아래에만 쓴다 (PC별 정보도 `data_dir/local/`). exe 옆에 파일 쓰기 금지
+- 배포 전 `tools/share_test.bat`로 검증
 - exe는 GitHub Actions(windows-latest) + PyInstaller onedir로 빌드
 
 ## 규칙

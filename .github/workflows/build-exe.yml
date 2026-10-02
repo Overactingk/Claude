@@ -29,6 +29,8 @@ jobs:
         shell: pwsh
         run: |
           Copy-Item config.example.ini, seed_tasks.json, 사용안내.md dist/jeonjang_tasks/
+          # C 드라이브에서 메모장 저장이 막힌 환경 대비: 기본 설정을 config.ini로 미리 넣어 둠
+          Copy-Item config.example.ini dist/jeonjang_tasks/config.ini
           Copy-Item tools/*.bat dist/jeonjang_tasks/
       - uses: actions/upload-artifact@v4
         with:

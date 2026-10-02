@@ -4,8 +4,11 @@
 데이터는 공유폴더의 이벤트 로그(store.py)로 주고받는다.
 """
 
+import argparse
 import configparser
+import getpass
 import json
+import os
 import shutil
 import socket
 import sys
@@ -401,6 +404,7 @@ def _load_local(path: Path) -> dict:
 
 
 def _save_local(path: Path, local: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(local, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
@@ -428,16 +432,31 @@ def backup_loop(events_dir: Path, backup_dir: Path) -> None:
         time.sleep(3600)
 
 
+def local_file(data_dir: Path, port: int) -> Path:
+    """PC별 정보 파일 위치.
+
+    회사 PC는 C 드라이브 저장이 막혀 있어(문서중앙화) exe 옆이 아니라 데이터 폴더에 둔다.
+    PC이름_사용자_포트 로 구분 → 같은 폴더를 여럿이 써도 겹치지 않음.
+    """
+    pc = os.environ.get("COMPUTERNAME") or socket.gethostname()
+    return data_dir / "local" / f"{pc}_{getpass.getuser()}_{port}.json"
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(description="전장 업무관리")
+    parser.add_argument("--import", dest="seed", type=Path, help="기존 업무 이관 (관리자 1회)")
+    parser.add_argument("--port", type=int, help="화면 포트 (한 PC에서 2개 띄워 테스트할 때)")
+    args = parser.parse_args()
+
     cfg = load_config(HOME_DIR / "config.ini")
     data_dir = Path(cfg["data_dir"])
-    port = cfg.getint("port", 8765)
+    port = args.port or cfg.getint("port", 8765)
 
     # 관리자 1회: 기존 업무 이관 (데이터이관.bat → exe --import seed_tasks.json)
-    if len(sys.argv) == 3 and sys.argv[1] == "--import":
+    if args.seed:
         from scripts.import_seed import import_seed
 
-        count = import_seed(Path(sys.argv[2]), data_dir)
+        count = import_seed(args.seed, data_dir)
         input(f"{count}건 이관 완료 → {data_dir / 'events'}\nEnter를 누르면 종료합니다.")
         return
     url = f"http://127.0.0.1:{port}/"
@@ -451,7 +470,9 @@ def main() -> None:
     try:
         ensure_dir_writable(data_dir / "events")
     except OSError as e:
-        input(f"[오류] 공유폴더에 접근할 수 없습니다: {data_dir}\n{e}\nEnter를 누르면 종료합니다.")
+        input(f"[오류] 데이터 폴더에 저장할 수 없습니다: {data_dir}\n{e}\n"
+              "config.ini의 data_dir이 저장 가능한 곳(예: U 드라이브)인지 확인하세요.\n"
+              "Enter를 누르면 종료합니다.")
         return
 
     if cfg.get("backup_dir"):
@@ -461,9 +482,10 @@ def main() -> None:
 
     from waitress import serve
 
-    app = create_app(data_dir, HOME_DIR / "local.json")
+    app = create_app(data_dir, local_file(data_dir, port))
     print("=" * 50)
     print(" 전장 업무관리 실행 중:", url)
+    print(" 데이터 폴더:", data_dir)
     print(" 이 창을 닫으면 프로그램이 종료됩니다.")
     print("=" * 50)
     threading.Timer(1.0, webbrowser.open, args=(url,)).start()
