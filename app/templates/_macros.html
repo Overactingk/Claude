@@ -1,0 +1,13 @@
+{# 상태 배지: 색 + 글자 (색만으로 구분하지 않음) #}
+{% macro badge(task) -%}
+  {%- set st = status_of(task) -%}
+  {%- set d = days_left(task) -%}
+  {%- if st == '지연' -%}<span class="badge b-overdue">⚠ 지연 D+{{ -d }}</span>
+  {%- elif st == '임박' -%}<span class="badge b-soon">임박 {{ 'D-day' if d == 0 else 'D-%d' % d }}</span>
+  {%- elif st == '완료' -%}<span class="badge b-done">완료</span>
+  {%- else -%}<span class="badge">진행중</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro row_class(task) -%}
+  {{ {'지연': 'r-overdue', '임박': 'r-soon', '완료': 'r-done'}.get(status_of(task), '') }}
+{%- endmacro %}

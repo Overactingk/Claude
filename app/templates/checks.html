@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>입력 점검 <small>{{ flagged|length }}건</small></h1>
+<p class="hint">데이터를 자동으로 고치지 않습니다. 담당자가 확인 후 수정하세요.</p>
+{% if store_errors %}
+<div class="flash flash-error">
+  <strong>공유폴더 로그에서 읽지 못한 줄</strong>
+  <ul>{% for e in store_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+<div class="table-wrap">
+<table class="tasks">
+  <thead><tr><th>No</th><th>프로젝트</th><th>담당</th><th>업무내용</th><th>점검 항목</th></tr></thead>
+  <tbody>
+  {% for t, issues in flagged %}
+  <tr>
+    <td><a href="{{ url_for('task_detail', task_id=t.id) }}">{{ t.no }}</a></td>
+    <td>{{ t.project or '' }}</td>
+    <td>{{ t.owner }}</td>
+    <td class="pre clip">{{ t.content }}</td>
+    <td>{% for i in issues %}<span class="badge {{ 'b-overdue' if i == '지연' else 'b-warn' }}">{{ i }}</span> {% endfor %}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5" class="empty">점검할 항목이 없습니다.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

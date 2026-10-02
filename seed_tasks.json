@@ -1,0 +1,735 @@
+[
+  {
+    "no": 1,
+    "project": "KMPV",
+    "created_date": null,
+    "target_dates": [
+      "2026-03-18",
+      "2026-06-19"
+    ],
+    "done_date": null,
+    "content": "모든도면에 락킹없는 커넥터(EX: AVM, RCA 등) 연결 후 풀리지않게 전기테이프 처리할것 문구 넣을것\n★★★ 군용커넥터는 업체품번과 MS품번 같이 적기 ★★★ (마스터리스트)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 2,
+    "project": "KMPV",
+    "created_date": null,
+    "target_dates": [
+      "2026-03-17"
+    ],
+    "done_date": null,
+    "content": "64130(스피커조립체) 도면 설변\n형상 구체화(제품치수, 마운팅치수, 단자연결정보)\n주기변경\n1) 제안된공급원 변경(파이오디오 주식회사로)\n2) 최소 구입수량정보 기입(참고용)\n3) 제품성능추가",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 3,
+    "project": "기타",
+    "created_date": null,
+    "target_dates": [
+      "2026-04-02"
+    ],
+    "done_date": null,
+    "content": "하네스 직각 꺽임구간 서로 안겹치게 (R값 서로달라야)",
+    "owner": "박삼용C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 4,
+    "project": "기타",
+    "created_date": null,
+    "target_dates": [
+      "2026-04-01"
+    ],
+    "done_date": null,
+    "content": "기술팀 업무관리 작성은 4월1일부터는 필수작성\n(4월 이전 업무작성은 일단 놔두기)",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 5,
+    "project": "KMPV TCV",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-30"
+    ],
+    "done_date": null,
+    "content": "쇼카 끝나고 스마트오디오 & 스피커 변경검토\n- 스마트오디오 : 에스아이오토(안드로이드오토)\n- 스피커 : 국내자동차 부품업체\n- ★ 공급안정 & 국내업체 (중국산배제)",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 6,
+    "project": "KMPV쇼카/공군",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-18",
+      "2026-06-19"
+    ],
+    "done_date": null,
+    "content": "개조 참고서 작성\n▶대시하네스 비교",
+    "owner": "이가람C",
+    "collaborators": [
+      "나대경M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 7,
+    "project": "KMPV쇼카",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-15",
+      "2026-05-29"
+    ],
+    "done_date": null,
+    "content": "후방센서조립체(쇼카꺼) 청우물산 보내서 개조작업해서 품질검증할것\n(실차량테스트 필요...연장부 블레이드처리 등)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 8,
+    "project": "비룡2",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-07"
+    ],
+    "done_date": null,
+    "content": "◾ 방향지시등 간단유닛 만들기방안 (콘덴서? CAN? , BCM 콘덴서 용량 교체?)",
+    "owner": "박삼용C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 9,
+    "project": "MNG",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-20",
+      "2026-06-17"
+    ],
+    "done_date": null,
+    "content": "회로파악 최종마무리하기",
+    "owner": "이가람C",
+    "collaborators": [
+      "이재욱M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 10,
+    "project": "교육",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-29"
+    ],
+    "done_date": null,
+    "content": "엑셀교육",
+    "owner": "나대경M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 11,
+    "project": "교육",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-30",
+      "2026-07-23"
+    ],
+    "done_date": null,
+    "content": "EHI 매뉴얼 기술팀 배포",
+    "owner": "나대경M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 12,
+    "project": "MNG",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-15"
+    ],
+    "done_date": null,
+    "content": "카비텍 개발계약진행",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 13,
+    "project": "KMPV TCV",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-26"
+    ],
+    "done_date": null,
+    "content": "TCV용 1대만 도면 나갈것. (타타진단기/노트북)",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": "영구라이센스로 구매필요(1대분)"
+  },
+  {
+    "no": 14,
+    "project": "KMPV",
+    "created_date": null,
+    "target_dates": [
+      "2026-05-22",
+      "2026-06-30"
+    ],
+    "done_date": null,
+    "content": "AVM ECU 도면(64430-SCP26)에 케이블 형상 현실화하여 구성잡고 설변출도할것",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 15,
+    "project": "KMPV TCV",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-26"
+    ],
+    "done_date": null,
+    "content": "▶ 보조배터리 스위치 천지테크 껄로 변경 (명판 변경필요)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 16,
+    "project": "MNG",
+    "created_date": null,
+    "target_dates": [
+      "2026-07-30"
+    ],
+    "done_date": null,
+    "content": "1. 회로도에 IN / OUT 표기\n2. 부품도면 출도시 전기정보 기본표기\n3. 상향등/ 패싱라이트사용 가능여부 -- 네이스코\n4. 브레이크 압력스위치 -> 각유닛(엔진/미션/abs등)에 보낼 제동순수0V GND 용 릴레이 추가 검토\n    -> ECU, TCU, ABS 등에 0~0.9V 이하면 브레이크 GND로 인식하는지 문의",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 17,
+    "project": "MNG",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-15"
+    ],
+    "done_date": null,
+    "content": "▶ 신규품 첫입고이니 루프모니터 3대\n     동작 테스트 진형 요망",
+    "owner": "이가람C",
+    "collaborators": [
+      "나대경M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 18,
+    "project": "KMPV(쇼카,공군)",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-15"
+    ],
+    "done_date": null,
+    "content": "조립도 세부 작업내용 표기 및 주기수정",
+    "owner": "이재욱M",
+    "collaborators": [
+      "나대경M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 19,
+    "project": "MNG",
+    "created_date": null,
+    "target_dates": [
+      "2026-06-24",
+      "2026-07-10"
+    ],
+    "done_date": null,
+    "content": "▶기술사양요구서 작성(램프장치)",
+    "owner": "나대경M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 20,
+    "project": "대포병",
+    "created_date": "2026-06-02",
+    "target_dates": [
+      "2026-07-16"
+    ],
+    "done_date": null,
+    "content": "보완요구사항 반영 3D 및 CATIA 도면 작성, 규격화 대응 준비",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 21,
+    "project": "MNG",
+    "created_date": "2026-06-04",
+    "target_dates": [
+      "2026-06-09",
+      "2026-06-26"
+    ],
+    "done_date": null,
+    "content": "PARKING BRAKE 신호 입력단 다이오드 안쓰고 ECU , BCM 동시 연결 가능하도록 검토",
+    "owner": "박삼용C",
+    "collaborators": [
+      "이재욱M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 22,
+    "project": "비룡2",
+    "created_date": "2026-06-05",
+    "target_dates": [
+      "2026-06-15"
+    ],
+    "done_date": null,
+    "content": "▶  요구사항 숙지",
+    "owner": "이가람C",
+    "collaborators": [
+      "박삼용C"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 23,
+    "project": "TCV",
+    "created_date": "2026-06-05",
+    "target_dates": [
+      "2026-07-20"
+    ],
+    "done_date": null,
+    "content": "▶  후방센서 꼭 적용.(전시차 대비 시스템부품도 적용빠진거 확인요망)\n  (공군차량 사양 참고) (정식요구사항보기)",
+    "owner": "이가람C",
+    "collaborators": [
+      "이재욱M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 24,
+    "project": "MNG",
+    "created_date": "2026-06-13",
+    "target_dates": [
+      "2026-06-15"
+    ],
+    "done_date": null,
+    "content": "▶ PTO 시스템 - 엘리슨과 BOA PTO업체와 회로구성 및 스위치 선정.\n▶ TM GEAR HOLD 스위치 회로 구성 파악 완료",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 25,
+    "project": "MNG",
+    "created_date": "2026-06-16",
+    "target_dates": [
+      "2026-06-19"
+    ],
+    "done_date": null,
+    "content": "▶CTIS 전원 스위치 따로 안쓰고 본체에 있는 스위치 길게 누르면 꺼지도록 수정",
+    "owner": "박삼용C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 26,
+    "project": "MNG",
+    "created_date": "2026-06-17",
+    "target_dates": [
+      "2026-06-18"
+    ],
+    "done_date": null,
+    "content": "▶두산 디젤엔진용 연료필터 / 수분분리기 실차 전압 측정(평동2공장 전시차)",
+    "owner": "이가람C",
+    "collaborators": [
+      "나대경M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 27,
+    "project": "MNG",
+    "created_date": "2026-06-17",
+    "target_dates": [
+      "2026-06-22"
+    ],
+    "done_date": null,
+    "content": "▶니어프에 설정 전압과 CAN 속도 송부.",
+    "owner": "박삼용C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 28,
+    "project": "MNG",
+    "created_date": "2026-06-18",
+    "target_dates": [],
+    "done_date": null,
+    "content": "▶ c.e.box 도면 내릴때 퓨즈 꽂히는 것 감안해서 도면 3개 내릴 것\n   (+ 라벨 색깔 스티커로 표기해서 네이스코에서 입고될수 있도록 도면 작성)",
+    "owner": "이가람C",
+    "collaborators": [
+      "이재욱M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 29,
+    "project": "기타",
+    "created_date": "2026-06-19",
+    "target_dates": [
+      "2026-07-07"
+    ],
+    "done_date": null,
+    "content": "▶ 하네스 회로매칭 자동화툴 배포 (프로그램/사용메뉴얼) (ERP저장)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 30,
+    "project": "MNG",
+    "created_date": "2026-06-19",
+    "target_dates": [
+      "2026-06-23"
+    ],
+    "done_date": null,
+    "content": "▶ MNG 회로설계 진행 일정짜기 → 하네스 설계 진행 (마루설계 동시진행)",
+    "owner": "박삼용C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 31,
+    "project": "MNG",
+    "created_date": "2026-06-19",
+    "target_dates": [
+      "2026-06-26"
+    ],
+    "done_date": null,
+    "content": "▶ TCU 회로도 완료 ★★★★★ (진짜마지막)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 32,
+    "project": "MNG",
+    "created_date": "2026-06-19",
+    "target_dates": [
+      "2026-06-26"
+    ],
+    "done_date": null,
+    "content": "▶ ECU 회로도 완료 ★★★★ (진짜마지막)",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 33,
+    "project": "MNG",
+    "created_date": "2026-06-22",
+    "target_dates": [
+      "2026-06-22"
+    ],
+    "done_date": null,
+    "content": "▶ 전방 트레일러 소켓 삭제 (마루에 전달",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 34,
+    "project": "비룡2",
+    "created_date": "2026-06-22",
+    "target_dates": [
+      "2026-06-25"
+    ],
+    "done_date": null,
+    "content": "▶ 지에스피에 선제작 요청할것. (입고 : 10/21)\n▶ 하네스 도면까지 문제 없게 나오게 할것. (미리수정해서줄것.) -(06/25)\n▶ 마루 송부자료 완료 (06/25)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 35,
+    "project": "MNG",
+    "created_date": "2026-06-22",
+    "target_dates": [
+      "2026-06-23"
+    ],
+    "done_date": null,
+    "content": "▶ TCM 전원성분 및 IN, OUT확인 (브레이크 / 후진)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 36,
+    "project": "MNG",
+    "created_date": "2026-06-22",
+    "target_dates": [
+      "2026-06-25"
+    ],
+    "done_date": null,
+    "content": "▶ 차량키 3D 전장으로 마루에 송부",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 37,
+    "project": "MNG",
+    "created_date": "2026-06-29",
+    "target_dates": [
+      "2026-07-31"
+    ],
+    "done_date": null,
+    "content": "▶에이스뷰 카메라 케이블 라벨 내용 수정, 에이스뷰 통보.(어느쪽이 ECU인지 표기 및 커넥터 양쪽에 라벨링)",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 38,
+    "project": null,
+    "created_date": "2026-06-30",
+    "target_dates": [
+      "2026-07-31"
+    ],
+    "done_date": null,
+    "content": "▶추후 도면 배포시 하네스 및 케이블류들 포설 경로 관련 도면 상세하게 표시 및 제품 케이블류들 포설 경로 도면 추가",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 39,
+    "project": "KMPV공군/TCV",
+    "created_date": "2026-07-02",
+    "target_dates": [
+      "2026-07-07"
+    ],
+    "done_date": null,
+    "content": "▶ OBD커넥터 2개중 보조OBD는 볼트고정하지말고 하네스에 묶기,",
+    "owner": "이재욱M",
+    "collaborators": [
+      "이가람C"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 40,
+    "project": "비룡2",
+    "created_date": "2026-07-02",
+    "target_dates": [
+      "2026-07-08"
+    ],
+    "done_date": null,
+    "content": "▶ 차량용충전기 요구사항 SNT와 확인후 마루에요청\n    시가잭 굳이 있어야하나...DC 공급해주는데...\n    (SNT와문구파악및협의필요)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 41,
+    "project": "MNG",
+    "created_date": "2026-07-06",
+    "target_dates": [
+      "2026-07-06"
+    ],
+    "done_date": null,
+    "content": "▶ ▪︎청우에 부품스펙정보 요청\n1.일반 콜게이트 사용온도등\n2.내열콜게이트 사용온도등\n2.은색 방열 튜브 (보통TM에사용하는)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 42,
+    "project": "MNG",
+    "created_date": "2026-07-08",
+    "target_dates": [
+      "2026-07-08"
+    ],
+    "done_date": null,
+    "content": "▶ 엘리슨미션에 CAN으로 에러코드 수신되는지 문의\n  1) 변속기 오일저압\n  2) 변속기 오일고온",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 43,
+    "project": "비룡2",
+    "created_date": "2026-07-10",
+    "target_dates": [
+      "2026-07-13"
+    ],
+    "done_date": null,
+    "content": "▶ CDR 요청자료 작성 (SNTD 박근우M)",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 44,
+    "project": "MNG",
+    "created_date": "2026-07-13",
+    "target_dates": [
+      "2026-07-10"
+    ],
+    "done_date": null,
+    "content": "엘리슨미션은 브레이크 상태를 CAN으로 수신할수 있는지 문의",
+    "owner": "이가람C",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 45,
+    "project": "기타",
+    "created_date": "2026-07-13",
+    "target_dates": [
+      "2026-07-13"
+    ],
+    "done_date": null,
+    "content": "BT-각자 개발과정 사진으로 PPT에 남기기\n    (빵판,PCB ESP납땜등, 회로도, 노트북 연결 테스트, 앱캡쳐,실차테스트 과정사진등)\n▶ 단계별로 많이 사진 남길것.",
+    "owner": "전장",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  },
+  {
+    "no": 46,
+    "project": "IAG베어샤시",
+    "created_date": "2026-07-14",
+    "target_dates": [
+      "2026-07-21"
+    ],
+    "done_date": null,
+    "content": "▶ 개조사항파악 (★샤시하네스/접지레벨/케이블 기존 유지)\n\n▶제작방향\n1. 개조 : 평동2 전시룸 RHD완성차 → LHD 베어샤시\n2. 변경 : 샤시 휠베이스 증가 (3300 → 3555)\n           →★ 샤시하네스/접지레벨/케이블\n           → 가능한 부품구매없게 검토",
+    "owner": "이가람C",
+    "collaborators": [
+      "이재욱M"
+    ],
+    "progress": null,
+    "file_path": null,
+    "note": "ㄴ"
+  },
+  {
+    "no": 47,
+    "project": "비룡2",
+    "created_date": "2026-07-14",
+    "target_dates": [
+      "2026-07-31"
+    ],
+    "done_date": "2026-08-24",
+    "content": "비룡2 마루요청\n  실리콘히터 도면구성. 샤시조립시 감기 조립\n  하네스 구성( 하네스에 퓨즈구성) 전원은 엔진룸 정션블럭에서\n  보온단열재",
+    "owner": "이재욱M",
+    "collaborators": [],
+    "progress": null,
+    "file_path": null,
+    "note": null
+  }
+]

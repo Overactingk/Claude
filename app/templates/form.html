@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block autoreload %}0{% endblock %}
+{% block content %}
+<h1>{{ '업무 수정' if task.id else '업무 등록' }}{% if task.no %} <small>No.{{ task.no }}</small>{% endif %}</h1>
+<form method="post" class="form">
+  {% if orig is not none %}<input type="hidden" name="orig" value="{{ orig|tojson|forceescape }}">{% endif %}
+  <div class="grid">
+    <label><span>프로젝트 차종 <em>*</em></span>
+      <input name="project" list="project-list" value="{{ task.project or '' }}" {% if not task.id %}required{% endif %}>
+      <datalist id="project-list">{% for p in projects %}<option value="{{ p }}">{% endfor %}</datalist>
+    </label>
+    <label><span>작성날짜 <em>*</em></span>
+      <input type="date" name="created_date" value="{{ task.created_date or '' }}" {% if not task.id %}required{% endif %}>
+    </label>
+    <label><span>목표 <em>*</em></span>
+      <input type="date" name="target" value="{{ task.target or '' }}" {% if not task.id %}required{% endif %}>
+      {% if task.target_history and task.target_history|length > 1 %}
+      <small>이력: {{ task.target_history|map(attribute='date')|join(' → ') }}</small>
+      {% else %}<small>바꾸면 이전 목표는 이력으로 자동 보관됩니다.</small>{% endif %}
+    </label>
+    <label>완료
+      <input type="date" name="done_date" value="{{ task.done_date or '' }}">
+      <small>입력하면 완료 처리됩니다.</small>
+    </label>
+    <label><span>주담당 <em>*</em></span>
+      <select name="owner" required>
+        {% for o in owners %}<option {% if task.owner == o %}selected{% endif %}>{{ o }}</option>{% endfor %}
+        {% if task.owner and task.owner not in owners %}<option selected>{{ task.owner }}</option>{% endif %}
+      </select>
+    </label>
+    <fieldset>
+      <legend>협업자</legend>
+      {% for c in collab_choices %}
+      <label class="check"><input type="checkbox" name="collaborators" value="{{ c }}" {% if c in task.collaborators %}checked{% endif %}> {{ c }}</label>
+      {% endfor %}
+      {% for c in task.collaborators if c not in collab_choices %}
+      <label class="check"><input type="checkbox" name="collaborators" value="{{ c }}" checked> {{ c }}</label>
+      {% endfor %}
+    </fieldset>
+    <label>출처
+      <select name="source">
+        <option value="">(선택)</option>
+        {% for s in sources %}<option {% if task.source == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>요청자
+      <input name="requester" list="requester-list" value="{{ task.requester or '' }}">
+      <datalist id="requester-list">{% for r in requesters %}<option value="{{ r }}">{% endfor %}</datalist>
+    </label>
+  </div>
+  <label class="wide"><span>업무내용 <em>*</em></span>
+    <textarea name="content" rows="6" required>{{ task.content or '' }}</textarea>
+  </label>
+  <label class="wide">파일경로
+    <input name="file_path" value="{{ task.file_path or '' }}" placeholder="\\서버\폴더\파일">
+  </label>
+  <label class="wide">비고
+    <input name="note" value="{{ task.note or '' }}">
+  </label>
+  <p class="hint">진행내용은 저장 후 상세 화면에서 날짜별로 추가합니다.</p>
+  <div class="actions">
+    <button>저장</button>
+    <a class="btn-ghost" href="{{ url_for('task_detail', task_id=task.id) if task.id else url_for('task_list') }}">취소</a>
+  </div>
+</form>
+{% endblock %}

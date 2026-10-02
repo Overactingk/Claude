@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge, row_class with context %}
+{% block content %}
+<form class="filters" method="get">
+  <label>담당
+    <select name="owner">
+      <option value="">전체</option>
+      {% for o in owners %}<option {% if args.owner == o %}selected{% endif %}>{{ o }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" name="collab" value="1" {% if args.collab == '1' %}checked{% endif %}> 협업 포함</label>
+  <label>프로젝트
+    <select name="project">
+      <option value="">전체</option>
+      {% for p in projects %}<option {% if args.project == p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>상태
+    <select name="status">
+      {% for s in ['', '미완료', '지연', '임박', '완료'] %}
+      <option value="{{ s }}" {% if args.status == s %}selected{% endif %}>{{ s or '전체' }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>목표일 <input type="date" name="from" value="{{ args.get('from', '') }}"></label>
+  <label>~ <input type="date" name="to" value="{{ args.get('to', '') }}"></label>
+  <label>검색 <input type="search" name="q" value="{{ args.get('q', '') }}" placeholder="업무내용·진행내용"></label>
+  <button>적용</button>
+  <a class="btn-ghost" href="{{ url_for('task_list') }}">초기화</a>
+  <span class="spacer"></span>
+  <a class="btn" href="{{ url_for('task_new') }}">+ 업무 등록</a>
+  <a class="btn-ghost" href="{{ url_for('export', **args) }}">엑셀 내보내기</a>
+</form>
+
+<form method="post" action="{{ url_for('bulk_done') }}">
+<div class="table-wrap">
+<table class="tasks">
+  <thead>
+    <tr>
+      <th class="c-chk"><span class="sr-only">선택</span></th>
+      <th>No</th><th>프로젝트 차종</th><th>작성날짜</th><th>목표</th><th>완료</th>
+      <th>업무내용</th><th>담당</th><th>진행내용</th><th>파일경로</th><th>비고</th><th>상태</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for t in tasks %}
+    <tr class="{{ row_class(t) }}">
+      <td class="c-chk">{% if can_edit(t) and not t.done_date %}<input type="checkbox" name="ids" value="{{ t.id }}" aria-label="{{ t.no }}번 선택">{% endif %}</td>
+      <td><a href="{{ url_for('task_detail', task_id=t.id) }}">{{ t.no }}</a></td>
+      <td>{{ t.project or '' }}</td>
+      <td class="num">{{ t.created_date or '' }}</td>
+      <td class="num keep">{{ target_cell(t) }}</td>
+      <td class="num">{{ t.done_date or '' }}</td>
+      <td class="pre content"><a href="{{ url_for('task_detail', task_id=t.id) }}">{{ t.content }}</a></td>
+      <td class="keep">{{ owner_cell(t) }}</td>
+      <td class="pre clip">{% for c in t.comments %}{{ c.ts[5:10] }} {{ c.by }}: {{ c.text }}
+{% endfor %}</td>
+      <td>{% if t.file_path %}<button type="button" class="copy" data-copy="{{ t.file_path }}" title="{{ t.file_path }}">경로 복사</button>{% endif %}</td>
+      <td class="pre">{{ t.note or '' }}</td>
+      <td>{{ badge(t) }}{% if issues_of(t)|reject('equalto', '지연')|list %}<span class="badge b-warn" title="{{ issues_of(t)|join(', ') }}">점검</span>{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="12" class="empty">조건에 맞는 업무가 없습니다.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<div class="bulkbar">
+  <span>{{ tasks|length }}건 · 선택한 업무를</span>
+  <label>완료일 <input type="date" name="done_date" value="{{ today.isoformat() }}"></label>
+  <button>일괄 완료 처리</button>
+</div>
+</form>
+{% endblock %}

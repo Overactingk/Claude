@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+config.ini
+local.json
+build/
+dist/
+*.spec

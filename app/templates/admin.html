@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block autoreload %}0{% endblock %}
+{% block content %}
+<h1>사용자 관리</h1>
+<table class="tasks">
+  <thead><tr><th>이름</th><th>관리자</th><th>로그인 가능</th><th>사용</th><th></th></tr></thead>
+  <tbody>
+  {% for u in users %}
+  <tr>
+    {# 표 안에는 form을 넣을 수 없어 form 속성으로 연결 #}
+    <td>{{ u.name }}<input type="hidden" form="u{{ loop.index }}" name="name" value="{{ u.name }}"></td>
+    <td><input type="checkbox" form="u{{ loop.index }}" name="is_admin" value="1" {% if u.is_admin %}checked{% endif %} aria-label="{{ u.name }} 관리자"></td>
+    <td><input type="checkbox" form="u{{ loop.index }}" name="can_login" value="1" {% if u.get('can_login', true) %}checked{% endif %} aria-label="{{ u.name }} 로그인 가능"></td>
+    <td><input type="checkbox" form="u{{ loop.index }}" name="active" value="1" {% if u.get('active', true) %}checked{% endif %} aria-label="{{ u.name }} 사용"></td>
+    <td><button form="u{{ loop.index }}">저장</button></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% for u in users %}<form id="u{{ loop.index }}" method="post"></form>{% endfor %}
+
+<h2>사용자 추가</h2>
+<form method="post" class="form narrow">
+  <label>이름 (예: 홍길동M) <input name="name" required></label>
+  <input type="hidden" name="active" value="1">
+  <input type="hidden" name="can_login" value="1">
+  <label class="check"><input type="checkbox" name="is_admin" value="1"> 관리자</label>
+  <div class="actions"><button>추가</button></div>
+</form>
+<p class="hint">사용자를 지우는 대신 '사용' 체크를 해제하세요. 기존 업무의 담당 기록은 남습니다. '전장'처럼 로그인 불가 사용자는 공통 업무 담당용입니다.</p>
+{% endblock %}

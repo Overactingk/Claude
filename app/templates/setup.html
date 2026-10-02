@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block autoreload %}0{% endblock %}
+{% block content %}
+<h1>사용자 선택</h1>
+<p class="hint">이 PC에서 사용할 이름을 고르세요. 한 번 고르면 기억합니다.</p>
+{% if users %}
+<form method="post" class="form narrow">
+  <label>이름
+    <select name="name" required>
+      <option value="">(선택)</option>
+      {% for u in users %}<option {% if u.name == me %}selected{% endif %}>{{ u.name }}</option>{% endfor %}
+    </select>
+  </label>
+  <div class="actions"><button>확인</button></div>
+</form>
+{% else %}
+<p class="flash flash-error">등록된 사용자가 없습니다. 관리자가 먼저 초기 데이터 이관(import_seed)을 실행해야 합니다.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,124 @@
+/* ===== 디자인 토큰 (이 블록이 디자인 기준 문서 역할) =====
+   대비율(WCAG)은 계산 확인값: 지연 6.80 / 임박 6.37 / 완료 6.92 / 기본 17.85 / 버튼 8.72 */
+:root {
+  --fg: #0F172A;
+  --muted: #475569;
+  --bg: #F8FAFC;
+  --card: #FFFFFF;
+  --border: #E2E8F0;
+  --primary: #1E40AF;
+  --on-primary: #FFFFFF;
+  --danger: #DC2626;
+  --overdue-fg: #991B1B; --overdue-bg: #FEE2E2;
+  --soon-fg: #92400E;    --soon-bg: #FEF3C7;
+  --done-fg: #475569;    --done-bg: #F1F5F9;
+  --header-yellow: #FFE699; /* 기존 엑셀 머리글 색 */
+  --ring: #1E40AF;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg);
+  background: var(--bg);
+}
+a { color: var(--primary); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* 상단바 */
+.topbar { display: flex; align-items: center; gap: 24px; padding: 8px 16px; background: var(--fg); color: #fff; }
+.topbar a { color: #fff; text-decoration: none; }
+.topbar nav { display: flex; gap: 16px; }
+.topbar nav a:hover, .who a:hover { text-decoration: underline; }
+.brand { font-weight: 700; font-size: 16px; }
+.who { margin-left: auto; font-size: 13px; }
+.banner { padding: 8px 16px; background: var(--soon-bg); color: var(--soon-fg); }
+
+main { padding: 16px; }
+h1 { font-size: 20px; margin: 0 0 12px; }
+h1 small, .hint { color: var(--muted); font-size: 13px; font-weight: normal; }
+h2 { font-size: 16px; margin: 24px 0 8px; }
+
+/* 버튼 */
+button, .btn, .btn-ghost, .btn-danger {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px;
+  border: 1px solid var(--primary); border-radius: 4px; font: inherit; cursor: pointer;
+  text-decoration: none; transition: background-color .15s;
+}
+button, .btn { background: var(--primary); color: var(--on-primary); }
+button:hover, .btn:hover { background: #1E3A8A; }
+.btn-ghost { background: var(--card); color: var(--primary); }
+.btn-ghost:hover { background: #EFF6FF; }
+.btn-danger { background: var(--card); color: var(--danger); border-color: var(--danger); }
+button.copy { min-height: 24px; padding: 0 8px; font-size: 12px; background: var(--card); color: var(--primary); }
+
+/* 필터 */
+.filters { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 12px; margin-bottom: 12px; }
+.filters label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); }
+.filters label.check { flex-direction: row; align-items: center; gap: 4px; padding-bottom: 6px; }
+.spacer { flex: 1; }
+input, select, textarea { font: inherit; padding: 4px 6px; border: 1px solid #94A3B8; border-radius: 4px; background: #fff; color: var(--fg); }
+
+/* 표 */
+.table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); max-height: calc(100vh - 210px); }
+table { border-collapse: collapse; width: 100%; }
+.tasks th, .tasks td, .history th, .history td { border: 1px solid var(--border); padding: 4px 6px; vertical-align: top; font-size: 13px; }
+.tasks thead th, .history thead th { position: sticky; top: 0; z-index: 1; background: var(--header-yellow); white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pre { white-space: pre-line; }
+.keep { white-space: pre; } /* 날짜·이름: 줄바꿈은 살리고 자동 줄넘김은 막음 */
+.content { min-width: 280px; max-width: 520px; }
+.content a { color: inherit; text-decoration: none; }
+.content a:hover { text-decoration: underline; }
+.clip { max-width: 280px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+td.clip { display: table-cell; }
+.c-chk { width: 28px; text-align: center; }
+.empty { text-align: center; color: var(--muted); padding: 24px; }
+
+/* 상태 행 색 + 배지 (배지 글자로도 상태 표시: 색만으로 구분하지 않음) */
+.r-overdue { background: var(--overdue-bg); color: var(--overdue-fg); }
+.r-soon { background: var(--soon-bg); color: var(--soon-fg); }
+.r-done { background: var(--done-bg); color: var(--done-fg); }
+.badge { display: inline-block; padding: 0 6px; border: 1px solid currentColor; border-radius: 10px; font-size: 12px; white-space: nowrap; margin: 1px 0; }
+.b-overdue { color: var(--overdue-fg); background: var(--overdue-bg); font-weight: 700; }
+.b-soon { color: var(--soon-fg); background: var(--soon-bg); }
+.b-done { color: var(--done-fg); background: var(--done-bg); }
+.b-warn { color: var(--soon-fg); background: #fff; }
+
+.bulkbar { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.bulkbar label { font-size: 13px; }
+
+/* 메시지 */
+.flash { padding: 8px 12px; border-radius: 4px; margin: 0 0 12px; }
+.flash-ok { background: #DCFCE7; color: #14532D; }
+.flash-error { background: var(--overdue-bg); color: var(--overdue-fg); }
+
+/* 폼 */
+.form { background: var(--card); border: 1px solid var(--border); padding: 16px; max-width: 960px; }
+.form.narrow { max-width: 360px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px 16px; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 13px; }
+.form label.check { flex-direction: row; align-items: center; font-weight: normal; }
+.form label small { font-weight: normal; color: var(--muted); }
+.form label em { color: var(--danger); font-style: normal; }
+.form input, .form select, .form textarea { font-weight: normal; }
+.form .wide { margin-top: 12px; }
+fieldset { border: 1px solid var(--border); border-radius: 4px; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+legend { font-weight: 600; font-size: 13px; }
+.actions { display: flex; gap: 8px; margin: 12px 0; align-items: center; }
+.actions form { margin: 0; }
+
+/* 상세 */
+.kv { background: var(--card); max-width: 960px; }
+.kv th { width: 120px; text-align: left; background: var(--done-bg); }
+.kv th, .kv td { border: 1px solid var(--border); padding: 6px 8px; vertical-align: top; }
+.comments { list-style: none; padding: 0; max-width: 960px; }
+.comments li { background: var(--card); border: 1px solid var(--border); padding: 8px; margin-bottom: 6px; }
+.comments .meta { color: var(--muted); font-size: 12px; }
+.history { max-width: 960px; background: var(--card); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

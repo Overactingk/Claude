@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}전장 업무관리{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-autoreload="{% block autoreload %}1{% endblock %}" data-rev="{{ rev }}">
+<header class="topbar">
+  <a class="brand" href="{{ url_for('task_list') }}">전장 업무관리</a>
+  {% if me %}
+  <nav>
+    <a href="{{ url_for('task_list') }}">업무 목록</a>
+    <a href="{{ url_for('dashboard') }}">현황</a>
+    <a href="{{ url_for('checks') }}">입력 점검</a>
+    {% if is_admin %}<a href="{{ url_for('admin') }}">관리자</a>{% endif %}
+  </nav>
+  <span class="who">{{ me }}{% if is_admin %} (관리자){% endif %} · <a href="{{ url_for('setup') }}">사용자 변경</a></span>
+  {% endif %}
+</header>
+<div id="live-banner" class="banner" hidden role="status">다른 사람이 수정한 내용이 있습니다. <a href="">새로고침</a></div>
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}<p class="flash flash-{{ cat }}" role="alert">{{ msg }}</p>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

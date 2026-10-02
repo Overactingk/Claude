@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>담당자별 현황 <small>{{ today.isoformat() }} 기준</small></h1>
+<table class="tasks dash">
+  <thead><tr><th>담당</th><th>전체</th><th>진행중</th><th>완료</th><th>지연</th><th>7일내 마감</th><th>협업 진행중</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <th scope="row">{{ r.name }}</th>
+    <td class="num"><a href="{{ url_for('task_list', owner=r.name) }}">{{ r.total }}</a></td>
+    <td class="num"><a href="{{ url_for('task_list', owner=r.name, status='미완료') }}">{{ r.open }}</a></td>
+    <td class="num"><a href="{{ url_for('task_list', owner=r.name, status='완료') }}">{{ r.done }}</a></td>
+    <td class="num {{ 'r-overdue' if r.overdue }}"><a href="{{ url_for('task_list', owner=r.name, status='지연') }}">{{ r.overdue }}</a></td>
+    <td class="num">{{ r.week }}</td>
+    <td class="num">{{ r.collab }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="hint">진행중 = 미완료 전체(지연 포함). 전체·진행중·완료·지연·7일내는 주담당 기준, 협업 진행중은 협업자로 들어간 미완료 업무.</p>
+{% endblock %}
