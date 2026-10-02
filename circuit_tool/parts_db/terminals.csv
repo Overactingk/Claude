@@ -1,0 +1,3 @@
+TERMINAL_PN,RATING_A,SQ_MIN,SQ_MAX,SOURCE
+TRM-A,15,0.5,1.0,SAMPLE(가상값) - 실제 판정 기준 아님
+TRM-B,25,1.25,2.5,SAMPLE(가상값) - 실제 판정 기준 아님

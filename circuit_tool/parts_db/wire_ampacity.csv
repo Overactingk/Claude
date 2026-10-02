@@ -1,0 +1,7 @@
+MATERIAL,SQ,ENV,AMPACITY_A,SOURCE
+FLRY,0.5,실내,9,SAMPLE(가상값) - 실제 판정 기준 아님
+FLRY,0.75,실내,12,SAMPLE(가상값) - 실제 판정 기준 아님
+FLRY,1.0,실내,15,SAMPLE(가상값) - 실제 판정 기준 아님
+FLRY,2.5,실내,25,SAMPLE(가상값) - 실제 판정 기준 아님
+FLRY,0.5,엔진룸,7,SAMPLE(가상값) - 실제 판정 기준 아님
+FLRY,0.75,엔진룸,10,SAMPLE(가상값) - 실제 판정 기준 아님

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회로 검증·편집</title>
+<style>
+:root{--bg:#f5f6f8;--panel:#fff;--line:#d8dce3;--text:#1d2330;--muted:#6b7385;--accent:#1f6feb;
+ --wire:#2b6cb0;--ng:#d1242f;--na:#b7791f;--ok:#1a7f37;--hl:#f08c00;--draw:#8a92a3}
+*{box-sizing:border-box}
+body{margin:0;font:13px/1.4 "Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;color:var(--text);background:var(--bg);
+ display:grid;grid-template-rows:44px 1fr 260px;grid-template-columns:220px 1fr 300px;height:100vh;overflow:hidden}
+header{grid-column:1/4;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--panel);border-bottom:1px solid var(--line)}
+header b{margin-right:auto}
+button{font:inherit;padding:5px 10px;border:1px solid var(--line);background:#fff;border-radius:5px;cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button:hover{filter:brightness(.96)}
+#sheets{background:var(--panel);border-right:1px solid var(--line);overflow:auto}
+#sheets div{padding:7px 10px;border-bottom:1px solid #eef0f3;cursor:pointer;word-break:break-all}
+#sheets div.on{background:#e7f0ff;font-weight:600}
+#sheets small{color:var(--muted);display:block}
+#canvas{position:relative;overflow:hidden;background:#fff}
+#canvas svg{width:100%;height:100%;cursor:grab;user-select:none}
+#hint{position:absolute;left:8px;bottom:6px;color:var(--muted);font-size:11px;pointer-events:none}
+#legend{position:absolute;right:8px;top:6px;font-size:11px;background:#fffd;padding:4px 6px;border:1px solid var(--line);border-radius:4px}
+#legend span{display:inline-block;width:10px;height:3px;margin:0 3px 2px 6px;vertical-align:middle}
+#props{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding:10px}
+#props h3{margin:0 0 4px;font-size:14px}
+#props .sub{color:var(--muted);margin-bottom:8px;word-break:break-all}
+#props label{display:block;margin-top:6px;color:var(--muted);font-size:11px}
+#props input{width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:4px;font:inherit}
+#props .row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+#bottom{grid-column:1/4;background:var(--panel);border-top:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+#tabs{display:flex;gap:2px;padding:4px 8px 0;border-bottom:1px solid var(--line)}
+#tabs button{border-radius:5px 5px 0 0;border-bottom:none}
+#tabs button.on{background:#e7f0ff;font-weight:600}
+#tabs .files{margin-left:auto;display:flex;gap:8px;align-items:center}
+#table{overflow:auto;flex:1}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid #eef0f3;padding:3px 6px;text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:#f0f2f5;z-index:1}
+tr:hover td{background:#f6f9ff;cursor:pointer}
+.OK{color:var(--ok);font-weight:600}.NG{color:var(--ng);font-weight:700}.NA{color:var(--na);font-weight:600}
+.empty{padding:16px;color:var(--muted)}
+#toast{position:fixed;left:50%;top:52px;transform:translateX(-50%);background:#1d2330;color:#fff;padding:6px 14px;border-radius:5px;display:none;z-index:9}
+</style>
+</head>
+<body>
+<header>
+ <b id="title">회로 검증·편집</b>
+ <button class="primary" id="btnVerify">검증 실행</button>
+ <button id="btnExport">DXF 내보내기</button>
+ <button id="btnFit">화면 맞춤</button>
+</header>
+<nav id="sheets"></nav>
+<main id="canvas">
+ <svg id="svg"></svg>
+ <div id="legend">전선<span style="background:var(--wire)"></span>NG<span style="background:var(--ng)"></span>추적<span style="background:var(--hl)"></span></div>
+ <div id="hint">휠: 확대/축소 · 드래그: 이동 · 클릭: 선택 (퓨즈 선택 시 추적 경로 표시)</div>
+</main>
+<aside id="props"><div class="empty">요소나 전선을 클릭하세요.</div></aside>
+<section id="bottom">
+ <div id="tabs">
+  <button data-t="fuse" class="on">퓨즈 요약</button><button data-t="wire">전선 상세</button>
+  <button data-t="err">오류</button><button data-t="elem">요소 목록</button>
+  <span class="files" id="files"></span>
+ </div>
+ <div id="table"></div>
+</section>
+<div id="toast"></div>
+<script>
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+let P = null, R = null, cur = null, sel = null, tab = "fuse", view = null;
+const KIND_COLOR = {FUSE:"#d1242f",BOX_TERMINAL:"#6f42c1",SPLICE:"#1d2330",INLINE:"#0a7ea4",PIN:"#1a7f37",SHEET_REF:"#f08c00"};
+const KIND_KO = {FUSE:"퓨즈",BOX_TERMINAL:"박스 단자",SPLICE:"분기점",INLINE:"인라인 커넥터",PIN:"핀",SHEET_REF:"시트 참조",WIRE:"전선"};
+
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",2500)}
+async function api(path, body){
+  const r = await fetch(path, body===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error(await r.text()); return r.json();
+}
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function jcls(v){return v==="OK"?"OK":v==="NG"?"NG":v==="판정 불가"?"NA":""}
+
+async function load(){
+  P = await api("/api/project");
+  $("#title").textContent = "회로 검증·편집 — " + P.name;
+  const ids = Object.keys(P.sheets);
+  $("#sheets").innerHTML = ids.map(id=>{const s=P.sheets[id];
+    const ne=Object.values(P.elements).filter(e=>e.sheet===id).length, nw=Object.values(P.wires).filter(w=>w.sheet===id).length;
+    return `<div data-id="${esc(id)}">${esc(s.drawing_no)}${s.sheet_no?"-"+s.sheet_no:""} ${esc(s.name)} <small>${esc(s.rev)} · 요소 ${ne} · 전선 ${nw}</small></div>`}).join("")
+    || '<div class="empty">시트 없음</div>';
+  $("#sheets").querySelectorAll("div[data-id]").forEach(d=>d.onclick=()=>showSheet(d.dataset.id));
+  if(ids.length) showSheet(cur && P.sheets[cur] ? cur : ids[0], !!cur);
+  renderTable();
+}
+
+function bbox(id){
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  const add=(x,y)=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)};
+  const d=P.display[id]||{polys:[],texts:[]};
+  d.polys.forEach(p=>p.forEach(q=>add(q[0],q[1])));
+  d.texts.forEach(t=>add(t[0],t[1]));
+  Object.values(P.wires).filter(w=>w.sheet===id).forEach(w=>w.segments.forEach(s=>s.forEach(q=>add(q[0],q[1]))));
+  Object.values(P.elements).filter(e=>e.sheet===id).forEach(e=>add(e.geom.points[0][0],e.geom.points[0][1]));
+  if(!isFinite(x0)) return [0,0,100,100];
+  const m=Math.max(x1-x0,y1-y0)*0.06+5; return [x0-m,-y1-m,(x1-x0)+2*m,(y1-y0)+2*m];
+}
+function setView(v){view=v;$("#svg").setAttribute("viewBox",v.join(" "))}
+
+function wireState(id){
+  if(!R) return "";
+  const rows=R.wire_rows.filter(r=>r._id===id);
+  if(rows.some(r=>r["전선 판정"]==="NG"||r["단자 판정"]==="NG")) return "ng";
+  return "";
+}
+function traced(){
+  if(!R||!sel) return null;
+  if(P.elements[sel]?.kind==="FUSE") return R.traces[sel]||null;
+  return null;
+}
+
+function showSheet(id, keepView){
+  cur=id;
+  $("#sheets").querySelectorAll("div[data-id]").forEach(d=>d.classList.toggle("on",d.dataset.id===id));
+  const svg=$("#svg"); svg.innerHTML="";
+  const d=P.display[id]||{polys:[],texts:[]};
+  const sz=bbox(id); const unit=Math.max(sz[2],sz[3])/700;
+  const g=document.createElementNS(NS,"g"); svg.appendChild(g);
+  // 배경 도형
+  let path="";
+  d.polys.forEach(p=>{path+="M"+p.map(q=>q[0]+" "+(-q[1])).join("L")});
+  const bg=document.createElementNS(NS,"path"); bg.setAttribute("d",path); bg.setAttribute("fill","none");
+  bg.setAttribute("stroke","var(--draw)"); bg.setAttribute("stroke-width",unit*0.8); g.appendChild(bg);
+  d.texts.forEach(t=>{const e=document.createElementNS(NS,"text");
+    e.setAttribute("x",t[0]);e.setAttribute("y",-t[1]);e.setAttribute("font-size",t[2]);e.setAttribute("fill","#4a5263");
+    if(t[3]) e.setAttribute("transform",`rotate(${-t[3]} ${t[0]} ${-t[1]})`);
+    e.textContent=t[4]; g.appendChild(e)});
+  const tr=traced(); const tw=new Set(tr?tr.wires:[]), te=new Set(tr?tr.elements:[]);
+  // 전선
+  Object.values(P.wires).filter(w=>w.sheet===id).forEach(w=>{
+    const p=document.createElementNS(NS,"path");
+    p.setAttribute("d",w.segments.map(s=>`M${s[0][0]} ${-s[0][1]}L${s[1][0]} ${-s[1][1]}`).join(""));
+    const st=wireState(w.id);
+    const color = sel===w.id ? "var(--accent)" : tw.has(w.id) ? "var(--hl)" : st==="ng" ? "var(--ng)" : "var(--wire)";
+    p.setAttribute("stroke",color); p.setAttribute("fill","none");
+    p.setAttribute("stroke-width",unit*(sel===w.id||tw.has(w.id)?3.2:1.8)); p.style.cursor="pointer";
+    const hit=p.cloneNode(); hit.setAttribute("stroke","transparent"); hit.setAttribute("stroke-width",unit*10);
+    hit.onclick=ev=>{ev.stopPropagation();select(w.id)};
+    const tt=document.createElementNS(NS,"title"); tt.textContent=`${w.attrs.WIRE_NO||"(라벨 없음)"} ${w.attrs.MATERIAL||""} ${w.attrs.SQ||""}sq ${w.attrs.COLOR||""}`;
+    hit.appendChild(tt); g.appendChild(p); g.appendChild(hit);
+  });
+  // 요소
+  Object.values(P.elements).filter(e=>e.sheet===id).forEach(e=>{
+    const [x,y]=e.geom.points[0];
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",x);c.setAttribute("cy",-y);c.setAttribute("r",unit*(sel===e.id?6:4));
+    c.setAttribute("fill",te.has(e.id)?"var(--hl)":KIND_COLOR[e.kind]||"#555"); c.setAttribute("fill-opacity",.85);
+    c.setAttribute("stroke",sel===e.id?"var(--accent)":"#fff"); c.setAttribute("stroke-width",unit*1.5);
+    c.style.cursor="pointer"; c.onclick=ev=>{ev.stopPropagation();select(e.id)};
+    const tt=document.createElementNS(NS,"title"); tt.textContent=`${KIND_KO[e.kind]}: ${P.labels[e.id]}`; c.appendChild(tt);
+    g.appendChild(c);
+  });
+  if(!keepView||!view) setView(sz); else setView(view);
+}
+
+function select(id, jump){
+  sel=id;
+  const it=P.elements[id]||P.wires[id];
+  if(it && (jump || it.sheet!==cur)) { showSheet(it.sheet); } else showSheet(cur,true);
+  renderProps();
+}
+
+function renderProps(){
+  const box=$("#props"); const e=P.elements[sel], w=P.wires[sel]; const it=e||w;
+  if(!it){box.innerHTML='<div class="empty">요소나 전선을 클릭하세요.</div>';return}
+  const kind=e?e.kind:"WIRE"; const tags=P.attr_tags[kind]||Object.keys(it.attrs);
+  const noHandle = e && !e.geom.handle;
+  let h=`<h3>${KIND_KO[kind]||kind} ${esc(e?P.labels[sel]:(w.attrs.WIRE_NO||""))}</h3><div class="sub">${esc(sel)}</div>`;
+  if(noHandle) h+='<div class="sub" style="color:var(--ng)">도면에 없는 가상 분기점 (Splice 블록 필요) — 편집 불가</div>';
+  tags.forEach(t=>h+=`<label>${t}</label><input data-tag="${t}" value="${esc(it.attrs[t])}" ${noHandle?"disabled":""}>`);
+  if(w){const n=x=>x?(P.labels[x]||x):"(미연결)"; h+=`<label>양 끝</label><div>${esc(n(w.ends[0]))} ↔ ${esc(n(w.ends[1]))}</div>`}
+  h+='<div class="row">';
+  if(!noHandle) h+='<button class="primary" id="btnSave">저장</button>';
+  if(e&&e.kind==="SHEET_REF") h+='<button id="btnPair">짝 시트로 이동</button>';
+  h+='</div>';
+  box.innerHTML=h;
+  const sv=$("#btnSave"); if(sv) sv.onclick=async()=>{
+    const attrs={}; box.querySelectorAll("input[data-tag]").forEach(i=>attrs[i.dataset.tag]=i.value);
+    await api("/api/item",{id:sel,attrs}); Object.assign(it.attrs,attrs);
+    if(e) P.labels[sel]=labelOf(e); toast("저장됨 — 검증을 다시 실행하세요"); showSheet(cur,true); renderTable();
+  };
+  const bp=$("#btnPair"); if(bp) bp.onclick=()=>{
+    const lid=(e.attrs.LINK_ID||"").trim().toUpperCase();
+    const pair=Object.values(P.elements).find(x=>x.kind==="SHEET_REF"&&x.id!==e.id&&(x.attrs.LINK_ID||"").trim().toUpperCase()===lid);
+    if(pair) select(pair.id,true); else toast("짝 참조 없음 (LINK_ID "+lid+")");
+  };
+}
+function labelOf(e){const a=e.attrs;return {FUSE:a.FUSE_NO,PIN:`${a.DEVICE} ${a.CONN}-${a.PIN_NO}`,BOX_TERMINAL:`${a.BOX} ${a.TERMINAL_NO}`,
+  SPLICE:"SPLICE "+a.SPLICE_NO,INLINE:`${a.CONN_NAME}-${a.PIN_NO}`,SHEET_REF:"REF "+a.LINK_ID}[e.kind]||e.id}
+
+function tableHtml(cols, rows, idOf){
+  if(!rows.length) return '<div class="empty">'+(R||tab==="elem"?"항목 없음":"[검증 실행]을 누르세요.")+'</div>';
+  return "<table><tr>"+cols.map(c=>`<th>${esc(c)}</th>`).join("")+"</tr>"+
+    rows.map((r,i)=>`<tr data-i="${i}">`+cols.map(c=>`<td class="${jcls(r[c])}">${esc(r[c])}</td>`).join("")+"</tr>").join("")+"</table>";
+}
+function renderTable(){
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  let cols, rows, idOf;
+  if(tab==="fuse"){cols=["시트","J/BOX","퓨즈번호","기능","전원","용량(A)","연결 핀 목록","부하 합계(A)","경로 최소 SQ","퓨즈 판정"];rows=R?R.fuse_rows:[];idOf=r=>r._id}
+  else if(tab==="wire"){cols=["시트","퓨즈번호","퓨즈 용량(A)","회로번호","재질","SQ","허용전류(A)","COLOR","From","To","하류 핀","하류 부하(A)","전선 판정","단자 판정"];rows=R?R.wire_rows:[];idOf=r=>r._id}
+  else if(tab==="err"){cols=["type","sheet","location","message"];rows=R?R.issues:P.issues;idOf=r=>null}
+  else {cols=["시트","종류","이름","속성"];rows=[...Object.values(P.elements).filter(e=>e.geom.handle).map(e=>({"시트":e.sheet,"종류":KIND_KO[e.kind],"이름":P.labels[e.id],"속성":Object.entries(e.attrs).filter(([k,v])=>v).map(([k,v])=>k+"="+v).join("  "),_id:e.id})),
+    ...Object.values(P.wires).map(w=>({"시트":w.sheet,"종류":"전선","이름":w.attrs.WIRE_NO||"(라벨 없음)","속성":Object.entries(w.attrs).filter(([k,v])=>v).map(([k,v])=>k+"="+v).join("  "),_id:w.id}))];idOf=r=>r._id}
+  const t=$("#table"); t.innerHTML=tableHtml(cols,rows,idOf);
+  if(tab==="err"&&rows.length) t.querySelector("tr").innerHTML="<th>유형</th><th>시트</th><th>위치</th><th>내용</th>";
+  t.querySelectorAll("tr[data-i]").forEach(tr=>tr.onclick=()=>{const id=idOf(rows[+tr.dataset.i]); if(id) select(id,true)});
+}
+
+$("#tabs").onclick=e=>{if(e.target.dataset.t){tab=e.target.dataset.t;renderTable()}};
+$("#btnVerify").onclick=async()=>{
+  R=await api("/api/verify",{});
+  const ng=R.fuse_rows.filter(r=>r["퓨즈 판정"]==="NG").length+R.wire_rows.filter(r=>r["전선 판정"]==="NG"||r["단자 판정"]==="NG").length;
+  toast(`퓨즈 ${R.fuse_rows.length} · 전선 구간 ${R.wire_rows.length} · NG ${ng} · 오류 ${R.issues.length}`);
+  $("#files").innerHTML=R.files.map(f=>`<a href="/out/${f}">${f}</a>`).join("");
+  showSheet(cur,true); renderTable();
+};
+$("#btnExport").onclick=async()=>{
+  const r=await api("/api/export",{});
+  toast(`${r.files.length}개 DXF 저장 (export_dxf 폴더)`+(r.issues.length?` · 실패 ${r.issues.length}`:""));
+};
+$("#btnFit").onclick=()=>cur&&setView(bbox(cur));
+
+// 확대/이동
+const svg=$("#svg"); let drag=null;
+svg.addEventListener("wheel",e=>{e.preventDefault(); if(!view) return;
+  const r=svg.getBoundingClientRect(); const s=Math.max(view[2]/r.width,view[3]/r.height);
+  const ox=view[0]+(view[2]-r.width*s)/2, oy=view[1]+(view[3]-r.height*s)/2;
+  const mx=ox+(e.clientX-r.left)*s, my=oy+(e.clientY-r.top)*s, k=e.deltaY>0?1.2:1/1.2;
+  setView([mx-(mx-view[0])*k,my-(my-view[1])*k,view[2]*k,view[3]*k])},{passive:false});
+svg.addEventListener("mousedown",e=>{drag={x:e.clientX,y:e.clientY,v:view.slice()};svg.style.cursor="grabbing"});
+window.addEventListener("mousemove",e=>{if(!drag) return; const r=svg.getBoundingClientRect();
+  const s=Math.max(drag.v[2]/r.width,drag.v[3]/r.height);
+  setView([drag.v[0]-(e.clientX-drag.x)*s,drag.v[1]-(e.clientY-drag.y)*s,drag.v[2],drag.v[3]])});
+window.addEventListener("mouseup",()=>{drag=null;svg.style.cursor="grab"});
+load().catch(e=>{document.body.innerHTML="<pre>"+esc(e.message)+"</pre>"});
+</script>
+</body>
+</html>
